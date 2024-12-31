@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tic Tac Toe</title>
-  <link rel="stylesheet" href="assets/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Tic Tac Toe</h1>
-    <p id="game-mode">Mode: <span id="mode-display">Player vs Player</span></p>
-    <div id="board">
-      <!-- Cells will be generated dynamically -->
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div>
+            <label for="mode">Game Mode:</label>
+            <select id="mode">
+                <option value="pvp">Player vs Player</option>
+                <option value="pvc">Player vs Computer</option>
+            </select>
+        </div>
+        <button id="reset">Reset Game</button>
+        <div id="board" class="board">
+            <!-- 9 cells, each one is a box in the Tic-Tac-Toe grid -->
+            <div class="box" data-index="0"></div>
+            <div class="box" data-index="1"></div>
+            <div class="box" data-index="2"></div>
+            <div class="box" data-index="3"></div>
+            <div class="box" data-index="4"></div>
+            <div class="box" data-index="5"></div>
+            <div class="box" data-index="6"></div>
+            <div class="box" data-index="7"></div>
+            <div class="box" data-index="8"></div>
+        </div>
+        <div id="message"></div>
     </div>
-    <button id="reset-btn">Reset Game</button>
-    <div id="mode-switcher">
-      <button id="pvp-mode">Player vs Player</button>
-      <button id="pvc-mode">Player vs Computer</button>
-    </div>
-    <p id="message"></p>
-  </div>
-  <script src="assets/script.js"></script>
+    <script src="assets/script.js"></script>
 </body>
 </html>
