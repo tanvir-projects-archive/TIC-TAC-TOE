@@ -74,70 +74,40 @@ function checkWinner() {
     }
 }
 
-// Computer's move (using Minimax Algorithm)
+// Improved bot move (weakened AI to allow player to win 65% of the time because my friend Corvus was crying)
 function computerMove() {
-    const bestMove = findBestMove();
-    board[bestMove] = 'O';
+    // Bot should sometimes make random moves
+    if (Math.random() < 0.65) {
+        // 65% chance: Make a suboptimal random move
+        const availableMoves = board.map((cell, index) => cell === '' ? index : -1).filter(index => index !== -1);
+        const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        board[randomMove] = 'O';
+    } else {
+        // 35% chance: Block or win
+        const winningMove = findBestMove('O');
+        if (winningMove !== -1) {
+            board[winningMove] = 'O';
+        } else {
+            // Block human from winning
+            const blockingMove = findBestMove('X');
+            if (blockingMove !== -1) {
+                board[blockingMove] = 'O';
+            } else {
+                // Otherwise, make a random move if no blocking or winning move
+                const availableMoves = board.map((cell, index) => cell === '' ? index : -1).filter(index => index !== -1);
+                const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                board[randomMove] = 'O';
+            }
+        }
+    }
+
     renderBoard();
     checkWinner();
     switchPlayer();
 }
 
-// Minimax algorithm to find the best move
-function findBestMove() {
-    let bestScore = -Infinity;
-    let move = -1;
-
-    for (let i = 0; i < board.length; i++) {
-        if (board[i] === '') {
-            board[i] = 'O'; // Simulate computer's move
-            let score = minimax(board, 0, false);
-            board[i] = ''; // Undo the move
-            if (score > bestScore) {
-                bestScore = score;
-                move = i;
-            }
-        }
-    }
-    return move;
-}
-
-// Minimax algorithm to calculate scores
-function minimax(board, depth, isMaximizing) {
-    const winner = getWinner();
-    if (winner) {
-        if (winner === 'O') return 10 - depth; // Favor fast wins
-        if (winner === 'X') return depth - 10; // Favor delaying opponent wins
-        return 0; // Draw
-    }
-
-    if (isMaximizing) {
-        let bestScore = -Infinity;
-        for (let i = 0; i < board.length; i++) {
-            if (board[i] === '') {
-                board[i] = 'O';
-                let score = minimax(board, depth + 1, false);
-                board[i] = '';
-                bestScore = Math.max(score, bestScore);
-            }
-        }
-        return bestScore;
-    } else {
-        let bestScore = Infinity;
-        for (let i = 0; i < board.length; i++) {
-            if (board[i] === '') {
-                board[i] = 'X';
-                let score = minimax(board, depth + 1, true);
-                board[i] = '';
-                bestScore = Math.min(score, bestScore);
-            }
-        }
-        return bestScore;
-    }
-}
-
-// Utility function to get the winner
-function getWinner() {
+// Find the best move for the bot (for both winning and blocking)
+function findBestMove(player) {
     const winningCombinations = [
         [0, 1, 2],
         [3, 4, 5],
@@ -151,15 +121,14 @@ function getWinner() {
 
     for (const combination of winningCombinations) {
         const [a, b, c] = combination;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            return board[a];
+        const cells = [board[a], board[b], board[c]];
+
+        if (cells.filter(cell => cell === player).length === 2 && cells.includes('')) {
+            return combination[cells.indexOf('')]; // Block or win
         }
     }
 
-    if (board.every(cell => cell !== '')) {
-        return 'draw';
-    }
-    return null;
+    return -1; // No winning or blocking move
 }
 
 // Reset the game
