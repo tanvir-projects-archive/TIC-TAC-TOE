@@ -74,14 +74,92 @@ function checkWinner() {
     }
 }
 
-// Computer's move (random selection)
+// Computer's move (using Minimax Algorithm)
 function computerMove() {
-    const availableMoves = board.map((cell, index) => cell === '' ? index : -1).filter(index => index !== -1);
-    const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-    board[randomMove] = 'O';
+    const bestMove = findBestMove();
+    board[bestMove] = 'O';
     renderBoard();
     checkWinner();
     switchPlayer();
+}
+
+// Minimax algorithm to find the best move
+function findBestMove() {
+    let bestScore = -Infinity;
+    let move = -1;
+
+    for (let i = 0; i < board.length; i++) {
+        if (board[i] === '') {
+            board[i] = 'O'; // Simulate computer's move
+            let score = minimax(board, 0, false);
+            board[i] = ''; // Undo the move
+            if (score > bestScore) {
+                bestScore = score;
+                move = i;
+            }
+        }
+    }
+    return move;
+}
+
+// Minimax algorithm to calculate scores
+function minimax(board, depth, isMaximizing) {
+    const winner = getWinner();
+    if (winner) {
+        if (winner === 'O') return 10 - depth; // Favor fast wins
+        if (winner === 'X') return depth - 10; // Favor delaying opponent wins
+        return 0; // Draw
+    }
+
+    if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === '') {
+                board[i] = 'O';
+                let score = minimax(board, depth + 1, false);
+                board[i] = '';
+                bestScore = Math.max(score, bestScore);
+            }
+        }
+        return bestScore;
+    } else {
+        let bestScore = Infinity;
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === '') {
+                board[i] = 'X';
+                let score = minimax(board, depth + 1, true);
+                board[i] = '';
+                bestScore = Math.min(score, bestScore);
+            }
+        }
+        return bestScore;
+    }
+}
+
+// Utility function to get the winner
+function getWinner() {
+    const winningCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            return board[a];
+        }
+    }
+
+    if (board.every(cell => cell !== '')) {
+        return 'draw';
+    }
+    return null;
 }
 
 // Reset the game
