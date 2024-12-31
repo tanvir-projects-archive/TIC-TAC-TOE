@@ -1,27 +1,41 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    background-color: #f4f4f4;
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 
-.container {
+.video-background {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.game-container {
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 300px;
-    margin: 0 auto;
+    padding-top: 20px;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-h1 {
-    margin-bottom: 20px;
-}
-
-button {
-    padding: 10px 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-#board {
+.board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 5px;
@@ -31,7 +45,7 @@ button {
 .box {
     width: 80px;
     height: 80px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8);
     border: 2px solid #000;
     font-size: 30px;
     line-height: 80px;
