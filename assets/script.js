@@ -64,6 +64,7 @@ function checkWinner() {
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
             gameOver = true;
             messageElement.textContent = `Player ${board[a]} wins!`;
+            setTimeout(resetGame, 2000); // Restart after 2 seconds
             return;
         }
     }
@@ -71,6 +72,7 @@ function checkWinner() {
     if (board.every(cell => cell !== '')) {
         gameOver = true;
         messageElement.textContent = 'It\'s a draw!';
+        setTimeout(resetGame, 2000); // Restart after 2 seconds
     }
 }
 
