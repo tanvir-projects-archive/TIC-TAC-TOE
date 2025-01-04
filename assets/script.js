@@ -64,7 +64,7 @@ function checkWinner() {
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
             gameOver = true;
             messageElement.textContent = `Player ${board[a]} wins!`;
-            setTimeout(resetGame, 3000); // Restart after 3 seconds
+            startCountdown(); // Start countdown before resetting
             return;
         }
     }
@@ -72,8 +72,22 @@ function checkWinner() {
     if (board.every(cell => cell !== '')) {
         gameOver = true;
         messageElement.textContent = 'It\'s a draw!';
-        setTimeout(resetGame, 3000); // Restart after 3 seconds
+        startCountdown(); // Start countdown before resetting
     }
+}
+
+// Countdown logic
+function startCountdown() {
+    let countdown = 3; // Countdown from 3 seconds
+    const interval = setInterval(() => {
+        messageElement.textContent = `Restarting game in... ${countdown}`;
+        countdown--;
+
+        if (countdown < 0) {
+            clearInterval(interval); // Stop the countdown
+            resetGame(); // Reset the game after the countdown
+        }
+    }, 1000); // Update every 1 second
 }
 
 // Improved bot move (weakened AI to allow player to win 65% of the time because my friend Corvus was crying)
