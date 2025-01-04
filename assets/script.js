@@ -80,7 +80,7 @@ function checkWinner() {
 function startCountdown() {
     let countdown = 3; // Countdown from 3 seconds
     const interval = setInterval(() => {
-        messageElement.textContent = `Restarting game in... ${countdown}`;
+        messageElement.textContent = `Restarting game in ${countdown}`;
         countdown--;
 
         if (countdown < 0) {
